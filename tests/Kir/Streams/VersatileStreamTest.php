@@ -81,6 +81,7 @@ class VersatileStreamTest extends \PHPUnit_Framework_TestCase {
 		$stream->truncate();
 		$stream->write('This is a test');
 		$stream->rewind();
+		return $stream;
 	}
 }
  
