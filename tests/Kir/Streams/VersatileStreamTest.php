@@ -40,6 +40,8 @@ class VersatileStreamTest extends \PHPUnit_Framework_TestCase {
 	 */
 	public function testPositioning() {
 		$stream = $this->createStream();
+		$stream->truncate();
+		$stream->write('0987654321');
 		$stream->setPosition(0);
 		$this->assertEquals(0, $stream->getPosition(), 'Set position to stream start');
 		$stream->setPosition(5);
