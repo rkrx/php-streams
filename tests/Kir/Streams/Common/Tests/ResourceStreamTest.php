@@ -1,16 +1,19 @@
 <?php
-namespace Kir\Streams\Impl;
+namespace Kir\Streams\Common\Tests;
 
-class StringStreamTest extends \PHPUnit_Framework_TestCase {
+use Kir\Streams\Impl\ResourceStream;
+
+class ResourceStreamTest extends \PHPUnit_Framework_TestCase {
 	/**
-	 * @var StringStream
+	 * @var ResourceStream
 	 */
 	private $stream = null;
 
 	/**
 	 */
 	public function setUp() {
-		$this->stream = new StringStream('');
+		$res = fopen('php://memory', 'r+');
+		$this->stream = new ResourceStream($res);
 	}
 
 	/**

@@ -1,5 +1,7 @@
 <?php
-namespace Kir\Streams\Impl;
+namespace Kir\Streams\Common\Tests;
+
+use Kir\Streams\Impl\PhpStream;
 
 class PhpStreamTest extends \PHPUnit_Framework_TestCase {
 	/**
