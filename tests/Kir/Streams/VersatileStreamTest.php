@@ -48,6 +48,22 @@ class VersatileStreamTest extends \PHPUnit_Framework_TestCase {
 	}
 
 	/**
+	 */
+	public function testTruncate() {
+		$stream = $this->createStream();
+
+		$stream->truncate();
+		$stream->write('This is a test');
+		$stream->truncate(0);
+		$this->assertEquals(0, $stream->getPosition());
+
+		$stream->truncate();
+		$stream->write('This is a test');
+		$stream->truncate(10);
+		$this->assertEquals(0, $stream->getPosition());
+	}
+
+	/**
 	 * @param StreamFactory $factory
 	 */
 	protected function setFactory(StreamFactory $factory) {
