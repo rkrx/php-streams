@@ -2,6 +2,8 @@
 	"name": "rkr/streams",
 	"description": "Basic stream interfaces in PHP",
 	"license": "MIT",
+	"minimum-stability": "dev",
+	"prefer-stable": true,
 	"authors": [{
 		"name": "ron",
 		"email": "ron.kirschler@gmail.com"
