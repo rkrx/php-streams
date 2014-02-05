@@ -1,15 +1,20 @@
 <?php
-namespace Kir\Streams\Common\Tests;
+namespace Kir\Streams;
 
-use Kir\Streams\Impl\PhpStream;
+use Kir\Streams\Helper\StreamFactory;
 
-class PhpStreamTest extends \PHPUnit_Framework_TestCase {
+class VersatileStreamTest extends \PHPUnit_Framework_TestCase {
+	/**
+	 * @var StreamFactory
+	 */
+	private $factory = null;
+
 	/**
 	 */
 	public function testRead() {
 		$stream = $this->createStream();
 		$data = $stream->read(7);
-		$this->assertEquals('0987654', $data);
+		$this->assertEquals('This is', $data);
 	}
 
 	/**
@@ -17,7 +22,7 @@ class PhpStreamTest extends \PHPUnit_Framework_TestCase {
 	public function testReadAll() {
 		$stream = $this->createStream();
 		$data = $stream->read();
-		$this->assertEquals('0987654321234567890', $data);
+		$this->assertEquals('This is a test', $data);
 	}
 
 	/**
@@ -43,28 +48,21 @@ class PhpStreamTest extends \PHPUnit_Framework_TestCase {
 	}
 
 	/**
+	 * @param StreamFactory $factory
 	 */
-	public function testSerialization() {
-		$stream = $this->createStream();
-		$stream->setPosition(5);
-		$expected = 'C:';
-		$ser = serialize($stream);
-		$this->assertStringStartsWith($expected, $ser);
-		$stream = unserialize($ser);
-		/* @var $stream PhpStream */
-		$content = $stream->read();
-		$this->assertEquals('54321234567890', $content);
-		$stream->close();
+	protected function setFactory(StreamFactory $factory) {
+		$this->factory = $factory;
 	}
 
 	/**
-	 * @return PhpStream
+	 * @return VersatileStream
 	 */
 	private function createStream() {
-		$tempName = tempnam(sys_get_temp_dir(), __CLASS__);
-		file_put_contents($tempName, '0987654321234567890');
-		$stream = new PhpStream($tempName, 'r+');
-		return $stream->open();
+		$stream = $this->factory->getStream();
+		/* @var $stream VersatileStream */
+		$stream->truncate();
+		$stream->write('This is a test');
+		$stream->rewind();
 	}
 }
  
