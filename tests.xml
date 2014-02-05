@@ -1,0 +1,14 @@
+<phpunit bootstrap="vendor/autoload.php"
+		 backupGlobals="false"
+		 backupStaticAttributes="false"
+		 strict="true"
+		 verbose="true"
+		 timeoutForSmallTests="5">
+	<testsuites>
+		<testsuite name="Streams">
+			<file>tests/Kir/Streams/Impl/ResourceStreamTest.php</file>
+			<file>tests/Kir/Streams/Impl/StringStreamTest.php</file>
+			<file>tests/Kir/Streams/Impl/PhpStreamTest.php</file>
+		</testsuite>
+	</testsuites>
+</phpunit>
