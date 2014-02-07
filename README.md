@@ -66,7 +66,7 @@ function handleStream(Stream $stream) {
 
 ![Inheritance](assets/diagram-closable.png)
 
-A `ClosableStream` is a stream which can be detached from an resource. An IoC-aware component may not enforce this interface in case of closing a stream could lead to unexpected behaviour in the outer program.
+A `ClosableStream` is a stream which can be disconnecten from a resource. An IoC-aware component may not enforce this interface in case of closing a stream could lead to unexpected behaviour in the outer program.
 
 *If a component does not really need to close a stream, then dont use this interface or any descendant of it.*
 
@@ -88,8 +88,14 @@ An `InputStream` is a read-only stream that has an end. The `InputStream` is goo
 
 The `InputStream` publish these methods:
 
-* `read($length = null): string`<br />read `$length` bytes from the current position. If the current position plus `$length` exceeds the end of stream, the actual content will contain only the remaining bytes till the end of the stream and the cursor gets placed there.
-* `isAtEnd(): bool`
+| Method | Return-type | Possible exception(s) |
+| - | - | - |
+| `read($length = null)` | `string` | IOException |
+| `isAtEnd()` | `bool` |  |
+
+* `read`: Reads `$length` bytes from the current position. If the current position plus `$length` exceeds the end of stream, the actual content will contain only the remaining bytes till the end of the stream and the cursor gets placed there.
+* `isAtEnd`: If `true` the end of the stream was reached with either a read- or seek-operation. This method must not throw an exception.
+
 
 Examples:
 
@@ -103,6 +109,8 @@ Examples:
 
 An `OutputStream` is a write-only stream. It has no information on its size or the cursor-position in the stream. The `OutputStream` is good for situations were it doesn't matter if a `Stream` has other abilities then writing data and closing the stream.
 
+
+
 Examples:
 
 * Pipe
@@ -114,7 +122,7 @@ Examples:
 
 ### OpenableStream
 
-TODO
+A `Stream` which implements this interface ships the method `open()` which connects to a resource.
 
 
 ### TruncatableStream
