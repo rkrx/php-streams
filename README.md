@@ -131,7 +131,7 @@ A `Stream` which implements this interface ships the method `open()` which conne
 
 Method | Return-type | Possible exception(s)
 ------ | ----------- | ---------------------
-`open()` | `static` | IOException
+`open()` | `static` | ResourceLockedException, IOException
 
 
 ### TruncatableStream
@@ -155,9 +155,9 @@ Method | Return-type | Possible exception(s)
 
 ### RandomAccessStream
 
-TODO
+The `VersatileStream` applies to fully accessible resources like local files. It extends `InputStream`, `OutputStream` and `SeekableStream`.
 
 
 ### VersatileStream
 
-TODO
+The `VersatileStream` applies to same kind of resource like `RandomAccessStream`. It extends `RandomAccessStream`, `TruncatableStream`, `ClosableStream` and `OpenableStream`.
