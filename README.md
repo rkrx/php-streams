@@ -120,11 +120,11 @@ Examples:
 
 ### TruncatableStream
 
-TODO
+Applies to resources which are truncatable.
 
 Method | Return-type | Possible exception(s)
 ------ | ----------- | ---------------------
-`truncate($size = 0)` | `static` | IOException
+`truncate()` | `static` | IOException
 
 
 ### SeekableStream
