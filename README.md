@@ -1,20 +1,23 @@
 php-streams
 ===========
 
-This is a common and framework-agnostic set of byte-stream-interfaces. The target is to supply an abstraction-layer for stream-providers as well as stream-consumers. There is documentation for the usage and the expected behaviour. Meaningful exceptions and compliance-tests are also included.
+<div style="background-color: red; color: white; font-weight: bold; padding: 10px; margin-top: 10px;">This library is work-in-progress.</div>
+
+This is a common and framework-agnostic set of stream-interfaces. The target is to supply an abstraction-layer for stream-providers as well as stream-consumers. There is documentation for the usage and the expected behaviour. Meaningful exceptions and compliance-tests are also included.
 
 
 Streams
 -------
 
-Byte-streams are useful to read and write byte-based data from resources. Resources can be everything that is able to emit or consume a stream of bytes:
+Streams are useful to read and write string-based data from resources. Resources can be everything that is able to emit or consume a stream of characters:
 
-- Devices
-- Files
-- Networks
-- Pipes
-- Virtual resources
-- etc
+* Devices
+* Files
+* Networks
+* Pipes
+* Virtual resources
+* Converters
+* etc
 
 Thanks to abstraction, an application, service, or framework could rely an appropriate interface and is henceforth aware of byte-streams of any form.
 
@@ -29,19 +32,14 @@ Every IoC-aware component should only depend on interfaces, which provide the re
 A logger for example only need to depend on a OutputStream. The logger do not need to open or close the stream, nor does it need to know about the stream-size or the current cursor-position. A logger should not be aware of log-file-rotation or disk-space-monitoring. This should be a concern of an outer component. So the logger could write to any writable stream without having a clue, what kind of stream this actually is.
 
 
-Charset and
----
+Charsets and data-types
+-----------------------
 
-The data is principally charset agnostic and the implementation should treat the input always as a stream of 8-bit characters. Charset-conversion is not a direct concern of a stream. The output of a stream could be converted (whenever it is actually a hex, base64 or utf8 stream) by domain-logic, which in turn could insert the output into another byte-stream. This could be done by a wrapping stream. Here is an non-functioning concept code example:
+Streams are principally charset agnostic. It's a concern of the respective implementation and its documentation how the incoming and outgoing data is treated.
 
+In the most basic implementation level, streams should always be treated 8-bit and charset independent. This is what the standard-implementation of this library will do.
 
-```PHP
-$inputStream = new Std\ResourceInputStream(STDIN);
-$base64Stream = new App\BufferedBase64ConvertStream($inputStream);
-new Std\StdOutputStream($base64Stream);
-```
-
-Please note
+It is totally valid to built streams, that read data from 8-bit-stream-implementations and convert them inplace. This applies to any form of charset conversion (ascii &gt; utf-8; en- or decryption; security scanning; etc).
 
 
 Overview
