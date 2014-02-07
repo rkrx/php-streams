@@ -29,7 +29,7 @@ Every stream implementation should only be forced to implement essential functio
 
 Every IoC-aware component should only depend on interfaces, which provide the required functionality.
 
-A logger for example only need to depend on a OutputStream. The logger do not need to open or close the stream, nor does it need to know about the stream-size or the current cursor-position. A logger should not be aware of log-file-rotation or disk-space-monitoring. This should be a concern of an outer component. So the logger could write to any writable stream without having a clue, what kind of stream this actually is.
+A logger for example only need to depend on a OutputStream. The logger do not need to know about the stream-size or the current cursor-position. A logger should not be aware of log-file-rotation or disk-space-monitoring. This should be a concern of an outer component. So the logger could write to any writable stream without having a clue, what kind of stream this actually is.
 
 
 Charsets and data-types
@@ -48,7 +48,7 @@ Overview
 
 ### Stream
 
-`Stream` is the base-class for a number of other classes. Its main purpose is to give a base type for type-hinting:
+`Stream` is the base-class for a number of other classes. Its main purpose is to provide functionality to connect or disconnect to a stream and give a base type for type-hinting:
 
 ```PHP
 function handleStream(Stream $stream) {
@@ -62,17 +62,10 @@ function handleStream(Stream $stream) {
 }
 ```
 
-### ClosableStream
-
-![Inheritance](assets/diagram-closable.png)
-
-A `ClosableStream` is a stream which can be disconnecten from a resource. An IoC-aware component may not enforce this interface in case of closing a stream could lead to unexpected behaviour in the outer program.
-
-*If a component does not really need to close a stream, then dont use this interface or any descendant of it.*
-
 Method | Return-type | Possible exception(s)
 ------ | ----------- | ---------------------
-`close()` | `static` | IOException
+`connect()` | `static` | ResourceLockedException, IOException
+`disconnect()` | `static` | IOException
 
 
 ### InfiniteInputStream
@@ -125,15 +118,6 @@ Examples:
 * Networkstreams
 
 
-### OpenableStream
-
-A `Stream` which implements this interface ships the method `open()` which connects to a resource.
-
-Method | Return-type | Possible exception(s)
------- | ----------- | ---------------------
-`open()` | `static` | ResourceLockedException, IOException
-
-
 ### TruncatableStream
 
 TODO
@@ -155,9 +139,10 @@ Method | Return-type | Possible exception(s)
 
 ### RandomAccessStream
 
-The `VersatileStream` applies to fully accessible resources like local files. It extends `InputStream`, `OutputStream` and `SeekableStream`.
+The `VersatileStream` applies to fully accessible resources like local files. It extends `InputStream`, `OutputStream` and `SeekableStream`. This interface should likly be used for read-, writable- and seekable resources.
 
+Examples:
 
-### VersatileStream
-
-The `VersatileStream` applies to same kind of resource like `RandomAccessStream`. It extends `RandomAccessStream`, `TruncatableStream`, `ClosableStream` and `OpenableStream`.
+* Local files
+* Network files (ftp, sftp, etc)
+* I/O-Converters (plain-to-base64 and vice-versa, en- and decryption, etc)
