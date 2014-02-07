@@ -131,17 +131,26 @@ A `Stream` which implements this interface ships the method `open()` which conne
 
 Method | Return-type | Possible exception(s)
 ------ | ----------- | ---------------------
-`close()` | `static` | IOException
+`open()` | `static` | IOException
 
 
 ### TruncatableStream
 
 TODO
 
+Method | Return-type | Possible exception(s)
+------ | ----------- | ---------------------
+`truncate($size = 0)` | `static` | IOException
+
 
 ### SeekableStream
 
-TODO
+Method | Return-type | Possible exception(s)
+------ | ----------- | ---------------------
+`getSize()` | `int` | IOException
+`getPosition()` | `int` | IOException
+`setPosition($pos)` | `static` | IOException
+`rewind()` | `static` | IOException
 
 
 ### RandomAccessStream
