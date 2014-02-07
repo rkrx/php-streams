@@ -35,11 +35,9 @@ A logger for example only need to depend on a OutputStream. The logger do not ne
 Charsets and data-types
 -----------------------
 
-Streams are principally charset agnostic. It's a concern of the respective implementation and its documentation how the incoming and outgoing data is treated.
+Streams are principally charset agnostic. It's a concern of the respective implementation and its documentation how the incoming and outgoing data is treated. The (upcoming) standard-implementation of this library will provide plain 8-bit access to the supported resources.
 
-In the most basic implementation level, streams should always be treated 8-bit and charset independent. This is what the standard-implementation of this library will do.
-
-It is totally valid to built streams, that read data from 8-bit-stream-implementations and convert them inplace. This applies to any form of charset conversion (ascii &gt; utf-8; en- or decryption; security scanning; etc).
+It is totally valid to build stream-implementations, that read data from other 8-bit-stream-implementations and convert them inplace. This applies to any form of direct conversion (charsets; en- or decoding; en- or decryption; security scanning; manipulation; etc).
 
 
 Overview
