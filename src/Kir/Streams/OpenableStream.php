@@ -1,7 +1,7 @@
 <?php
 namespace Kir\Streams;
 
-interface OpenableStream extends Stream {
+interface OpenableStream extends ClosableStream {
 	/**
 	 * @return $this
 	 */

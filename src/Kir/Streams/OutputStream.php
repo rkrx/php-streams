@@ -1,7 +1,7 @@
 <?php
 namespace Kir\Streams;
 
-interface OutputStream extends Stream {
+interface OutputStream extends ClosableStream {
 	/**
 	 * @param string $data
 	 * @return $this

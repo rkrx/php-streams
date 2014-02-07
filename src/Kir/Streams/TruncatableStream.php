@@ -1,7 +1,7 @@
 <?php
 namespace Kir\Streams;
 
-interface TruncatableStream extends Stream {
+interface TruncatableStream extends ClosableStream {
 	/**
 	 * @param int $size
 	 * @return $this

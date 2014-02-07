@@ -1,5 +1,7 @@
 <?php
 namespace Kir\Streams;
 
-interface SerializableStream extends \Serializable {
+use Serializable;
+
+interface SerializableStream extends Stream, Serializable {
 }
