@@ -1,12 +1,13 @@
 php-streams
 ===========
 
-This is a framework-agnostic set of byte-streams to abstract the support for streams in PHP. There is documentation on the expected behaviour. Exceptions and compliance-tests are also included.
+This is a common and framework-agnostic set of byte-stream-interfaces. The target is to supply an abstraction-layer for stream-providers as well as stream-consumers. There is documentation for the usage and the expected behaviour. Meaningful exceptions and compliance-tests are also included.
+
 
 Streams
 -------
 
-Byte-streams are useful to read and write byte-based data from resources. Those resources can be everything that is able to emit or consume a stream of bytes:
+Byte-streams are useful to read and write byte-based data from resources. Resources can be everything that is able to emit or consume a stream of bytes:
 
 - Devices
 - Files
