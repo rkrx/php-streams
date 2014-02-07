@@ -9,7 +9,7 @@ This is a common and framework-agnostic set of stream-interfaces. The target is 
 Streams
 -------
 
-Streams are useful to read and write string-based data from resources. Resources can be everything that is able to emit or consume a stream of characters:
+Streams are useful to read and write string-based data from resources. Especially for PHP, streams have also the advantage that streams don't clone their data when passed as a function- or method-parameter which could lead to much less memory consumption based on the intense of large-string-usage. Resources can be everything that is able to emit or consume a stream of characters:
 
 * Devices
 * Files
@@ -35,7 +35,7 @@ A logger for example only need to depend on a OutputStream. The logger do not ne
 Charsets and data-types
 -----------------------
 
-Streams are principally charset agnostic. It's a concern of the respective implementation and its documentation how the incoming and outgoing data is treated. The (upcoming) standard-implementation of this library will provide plain 8-bit access to the supported resources.
+PHP has no support for byte-arrays like java. Every read- and write-operation is done using strings which are an array of (currently, as of PHP 5.x) 8-bit characters. Streams are principally charset agnostic. It's a concern of the respective implementation and its documentation how the incoming and outgoing data is treated. The (upcoming) standard-implementation of this library will provide plain 8-bit access to the supported resources.
 
 It is totally valid to build stream-implementations, that read data from other 8-bit-stream-implementations and convert them inplace. This applies to any form of direct conversion (charsets; en- or decoding; en- or decryption; security scanning; manipulation; etc).
 

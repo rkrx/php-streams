@@ -1,6 +1,5 @@
 <?php
 namespace Kir\Streams;
-use Kir\Streams\Exceptions\IOException;
 
 /**
  * Interface Stream
@@ -10,15 +9,4 @@ use Kir\Streams\Exceptions\IOException;
  * @abstract
  */
 interface Stream {
-	/**
-	 * @throws IOException
-	 * @return $this
-	 */
-	public function connect();
-
-	/**
-	 * @throws IOException
-	 * @return $this
-	 */
-	public function disconnect();
 }
