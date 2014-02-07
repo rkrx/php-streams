@@ -146,3 +146,9 @@ Examples:
 * Local files
 * Network files (ftp, sftp, etc)
 * I/O-Converters (plain-to-base64 and vice-versa, en- and decryption, etc)
+
+
+Versioning
+----------
+
+www.semver.org
