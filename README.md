@@ -33,6 +33,7 @@ Overview
 
 ![Inheritance](assets/diagram.png)
 
+
 ### Stream
 
 The `Stream` is the base-class for a number of other classes. Its mail purpose is to give a base type for type-hinting:
@@ -52,6 +53,8 @@ function handleStream(Stream $stream) {
 ### ClosableStream
 
 A `ClosableStream` can be detached from an resource. An IoC-aware component may not enforce this interface if closing a stream could lead to unexpected behavior in the outer programm.
+
+![Inheritance](assets/diagram-closable.png)
 
 
 ### InfiniteInputStream
