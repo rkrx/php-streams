@@ -1,7 +1,7 @@
 <?php
 namespace Kir\Streams;
 
-interface InputStream extends ClosableStream {
+interface InputStream extends Stream {
 	/**
 	 * @return bool
 	 */

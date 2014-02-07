@@ -1,7 +1,7 @@
 <?php
 namespace Kir\Streams;
 
-interface InfiniteInputStream extends Stream {
+interface ClosableInfiniteInputStream extends InfiniteInputStream, ClosableStream {
 	/**
 	 * @param int $length
 	 * @return string
