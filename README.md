@@ -89,9 +89,9 @@ An `InputStream` is a read-only stream that has an end. The `InputStream` is goo
 The `InputStream` publish these methods:
 
 | Method | Return-type | Possible exception(s) |
-| - | - | - |
+| --- | --- | --- |
 | `read($length = null)` | `string` | IOException |
-| `isAtEnd()` | `bool` |  |
+| `isAtEnd()` | `bool` | - |
 
 * `read`: Reads `$length` bytes from the current position. If the current position plus `$length` exceeds the end of stream, the actual content will contain only the remaining bytes till the end of the stream and the cursor gets placed there.
 * `isAtEnd`: If `true` the end of the stream was reached with either a read- or seek-operation. This method must not throw an exception.
