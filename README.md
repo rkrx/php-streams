@@ -70,6 +70,10 @@ A `ClosableStream` is a stream which can be disconnecten from a resource. An IoC
 
 *If a component does not really need to close a stream, then dont use this interface or any descendant of it.*
 
+Method | Return-type | Possible exception(s)
+------ | ----------- | ---------------------
+`close()` | `static` | IOException
+
 
 ### InfiniteInputStream
 
@@ -96,11 +100,6 @@ Method | Return-type | Possible exception(s)
 * `read`: Reads `$length` bytes from the current position. If the current position plus `$length` exceeds the end of stream, the actual content will contain only the remaining bytes till the end of the stream and the cursor gets placed there.
 * `isAtEnd`: If `true` the end of the stream was reached with either a read- or seek-operation. This method must not throw an exception.
 
-| Name | Description          |
-| ------------- | ----------- |
-| Help      | Display the help window.|
-| Close     | Closes a window     |
-
 Examples:
 
 * Pipe
@@ -113,7 +112,9 @@ Examples:
 
 An `OutputStream` is a write-only stream. It has no information on its size or the cursor-position in the stream. The `OutputStream` is good for situations were it doesn't matter if a `Stream` has other abilities then writing data and closing the stream.
 
-
+Method | Return-type | Possible exception(s)
+------ | ----------- | ---------------------
+`write($data)` | `static` | IOException
 
 Examples:
 
@@ -127,6 +128,10 @@ Examples:
 ### OpenableStream
 
 A `Stream` which implements this interface ships the method `open()` which connects to a resource.
+
+Method | Return-type | Possible exception(s)
+------ | ----------- | ---------------------
+`close()` | `static` | IOException
 
 
 ### TruncatableStream
