@@ -17,6 +17,16 @@ Bytestreams are useful to read and write byte-based data from resources. Those r
 
 Through abstraction an application, service or framework could rely a appropriate interface and is henceforth aware of byte-streams of any form.
 
+The interfaces are build with the SOLID-principles in mind, especially the [interface-segregation-principle](http://en.wikipedia.org/wiki/Interface_segregation_principle).
+
+Every interface should only implement the absolut necessary methods required to target an (possible) existing type of stream.
+
+Every stream implementation should only be forced to implement applicable functionality.
+
+Every IoC-aware component should only depend on interfaces, which are provide the required functionality.
+
+A logger for example only need to depend on a OutputStream. The logger do not need to open or close the stream nor does it need to know about the stream-size or the current cursor-position. A logger should not be aware of log-file-rotation or diskspace-monitoring. This is done by an outer component. So the logger could write to any writable stream without ay clue, what kind of stream this exactly is.
+
 
 Overview
 --------
@@ -41,7 +51,7 @@ function handleStream(Stream $stream) {
 
 ### ClosableStream
 
-An `ClosableStream` is a stream, that can be closed. An IoC-aware component may not enforce this interface as closing a stream could lead to unexpected behavior.
+A `ClosableStream` can be detached from an resource. An IoC-aware component may not enforce this interface if closing a stream could lead to unexpected behavior in the outer programm.
 
 
 ### InfiniteInputStream
