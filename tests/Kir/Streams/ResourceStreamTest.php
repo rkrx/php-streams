@@ -3,7 +3,7 @@ namespace Kir\Streams;
 
 use Kir\Streams\Helper\StreamFactory;
 
-class VersatileStreamTest extends \PHPUnit_Framework_TestCase {
+class ResourceStreamTest extends \PHPUnit_Framework_TestCase {
 	/**
 	 * @var StreamFactory
 	 */
@@ -29,7 +29,6 @@ class VersatileStreamTest extends \PHPUnit_Framework_TestCase {
 	 */
 	public function testWrite() {
 		$stream = $this->createStream();
-		$stream->truncate();
 		$stream->write('ABCDEFG');
 		$stream->rewind();
 		$data = $stream->read();
@@ -40,7 +39,6 @@ class VersatileStreamTest extends \PHPUnit_Framework_TestCase {
 	 */
 	public function testPositioning() {
 		$stream = $this->createStream();
-		$stream->truncate();
 		$stream->write('0987654321');
 		$stream->setPosition(0);
 		$this->assertEquals(0, $stream->getPosition(), 'Set position to stream start');
@@ -54,15 +52,17 @@ class VersatileStreamTest extends \PHPUnit_Framework_TestCase {
 	public function testTruncate() {
 		$stream = $this->createStream();
 
-		$stream->truncate();
-		$stream->write('This is a test');
-		$stream->truncate(0);
-		$this->assertEquals(0, $stream->getPosition());
+		if($stream instanceof TruncatableStream) {
+			$stream->truncate();
+			$stream->write('This is a test');
+			$stream->truncate(0);
+			$this->assertEquals(0, $stream->getPosition());
 
-		$stream->truncate();
-		$stream->write('This is a test');
-		$stream->truncate(10);
-		$this->assertEquals(0, $stream->getPosition());
+			$stream->truncate();
+			$stream->write('This is a test');
+			$stream->truncate(10);
+			$this->assertEquals(0, $stream->getPosition());
+		}
 	}
 
 	/**
@@ -73,15 +73,10 @@ class VersatileStreamTest extends \PHPUnit_Framework_TestCase {
 	}
 
 	/**
-	 * @return VersatileStream
+	 * @return RandomAccessStream
 	 */
 	private function createStream() {
-		$stream = $this->factory->getStream();
-		/* @var $stream VersatileStream */
-		$stream->truncate();
-		$stream->write('This is a test');
-		$stream->rewind();
-		return $stream;
+		return $this->factory->getStream();
 	}
 }
  
