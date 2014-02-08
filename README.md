@@ -31,6 +31,8 @@ Every IoC-aware component should only depend on interfaces, which provide the re
 
 A logger for example only need to depend on a OutputStream. The logger do not need to know about the stream-size or the current cursor-position. A logger should not be aware of log-file-rotation or disk-space-monitoring. This should be a concern of an outer component. So the logger could write to any writable stream without having a clue, what kind of stream this actually is.
 
+Under certain circumstances, streams could be serializable. This is the case if a stream implements the `SerializableStream` interface. Internally normally only the state of the stream gets serialized. On deserialization, the state is restored and the stream tries to get to the last position in the stream. A serializable memory-stream needs to store the whole content somewhere on serialization.
+
 
 Charsets and data-types
 -----------------------
