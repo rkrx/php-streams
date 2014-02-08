@@ -19,6 +19,14 @@ Streams are useful to read and write string-based data from resources. Especiall
 * Converters
 * etc
 
+### Why use streams instead of string?
+
+Streams ...
+
+* are charset-agnostic
+* can be passed by reference, just like classes
+* can be (under certain circumstances) serialized and deserialized without consuming much memory.
+
 Thanks to abstraction, an application, service, or framework could rely an appropriate interface and is henceforth aware of byte-streams of any form.
 
 The interfaces are built with the SOLID-principles in mind, especially the [interface-segregation-principle](http://en.wikipedia.org/wiki/Interface_segregation_principle).
