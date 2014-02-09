@@ -1,20 +1,32 @@
 <?php
 namespace Kir\Streams;
 
-use Kir\Streams\Helper\StreamFactory;
-
-class ResourceStreamTest extends \PHPUnit_Framework_TestCase {
+class ResourceStreamTest {
 	/**
-	 * @var StreamFactory
+	 * @var Helper\StreamFactory
 	 */
 	private $factory = null;
+
+	/**
+	 * @var Helper\NondestructiveReadWriteStream
+	 */
+	private $referenceResource;
+
+	/**
+	 */
+	public function __construct(Helper\StreamFactory $factory) {
+		$this->factory = $factory;
+
+		$sourceStream = new Helper\ResourceStream(__DIR__.'/../../assets/test-data.txt', 'r');
+		$this->referenceResource = new Helper\NondestructiveReadWriteStream($sourceStream);
+	}
 
 	/**
 	 */
 	public function testRead() {
 		$stream = $this->createStream();
 		$data = $stream->read(7);
-		$this->assertEquals('This is', $data);
+		\PHPUnit_Framework_Assert::assertEquals('This is', $data);
 	}
 
 	/**
@@ -22,7 +34,7 @@ class ResourceStreamTest extends \PHPUnit_Framework_TestCase {
 	public function testReadAll() {
 		$stream = $this->createStream();
 		$data = $stream->read();
-		$this->assertEquals('This is a test', $data);
+		\PHPUnit_Framework_Assert::assertEquals('This is a test', $data);
 	}
 
 	/**
@@ -32,7 +44,7 @@ class ResourceStreamTest extends \PHPUnit_Framework_TestCase {
 		$stream->write('ABCDEFG');
 		$stream->rewind();
 		$data = $stream->read();
-		$this->assertEquals('ABCDEFG', $data);
+		\PHPUnit_Framework_Assert::assertEquals('ABCDEFG', $data);
 	}
 
 	/**
@@ -41,10 +53,10 @@ class ResourceStreamTest extends \PHPUnit_Framework_TestCase {
 		$stream = $this->createStream();
 		$stream->write('0987654321');
 		$stream->setPosition(0);
-		$this->assertEquals(0, $stream->getPosition(), 'Set position to stream start');
+		\PHPUnit_Framework_Assert::assertEquals(0, $stream->getPosition(), 'Set position to stream start');
 		$stream->setPosition(5);
-		$this->assertEquals(5, $stream->getPosition(), 'Set position to 5');
-		$this->assertEquals('54321', $stream->read(5));
+		\PHPUnit_Framework_Assert::assertEquals(5, $stream->getPosition(), 'Set position to 5');
+		\PHPUnit_Framework_Assert::assertEquals('54321', $stream->read(5));
 	}
 
 	/**
@@ -52,24 +64,14 @@ class ResourceStreamTest extends \PHPUnit_Framework_TestCase {
 	public function testTruncate() {
 		$stream = $this->createStream();
 
-		if($stream instanceof TruncatableStream) {
-			$stream->truncate();
-			$stream->write('This is a test');
-			$stream->truncate(0);
-			$this->assertEquals(0, $stream->getPosition());
-
-			$stream->truncate();
-			$stream->write('This is a test');
-			$stream->truncate(10);
-			$this->assertEquals(0, $stream->getPosition());
-		}
+		$this->truncateStream($stream);
+		$stream->write('This is a test');
+		$this->truncateStream($stream);
+		\PHPUnit_Framework_Assert::assertEquals(0, $stream->getPosition());
 	}
 
-	/**
-	 * @param StreamFactory $factory
-	 */
-	protected function setFactory(StreamFactory $factory) {
-		$this->factory = $factory;
+	private function truncateStream(TruncatableStream $stream) {
+		$stream->truncate();
 	}
 
 	/**

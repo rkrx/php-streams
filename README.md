@@ -80,7 +80,7 @@ Method | Return-type | Possible exception(s)
 
 ### InfiniteInputStream
 
-An `InfiniteInputStream` is a read-only stream that has no end. The `InputStream` is good for situations were it doesn't matter if a `Stream` has other abilities then reading data. It does not ship methods to open or close a stream.
+An `InfiniteInputStream` is a read-only stream that has no end. The `InputStream` is good for situations were it doesn't matter if a `Stream` has other abilities then reading data.
 
 Examples:
 
@@ -91,7 +91,7 @@ Examples:
 
 ### InputStream
 
-An `InputStream` is a read-only stream that has an end. The `InputStream` is good for situations were it doesn't matter if a `Stream` has other abilities then reading data and closing the stream.
+An `InputStream` is a read-only stream that has an end. The `InputStream` is good for situations were it doesn't matter if a `Stream` has other abilities then reading data.
 
 The `InputStream` publish these methods:
 
@@ -113,11 +113,14 @@ Examples:
 
 ### OutputStream
 
-An `OutputStream` is a write-only stream. It has no information on its size or the cursor-position in the stream. The `OutputStream` is good for situations were it doesn't matter if a `Stream` has other abilities then writing data and closing the stream.
+An `OutputStream` is a write-only stream. It has no information on its size or the cursor-position in the stream. The `OutputStream` is good for situations were it doesn't matter if a `Stream` has other abilities then writing data.
 
 Method | Return-type | Possible exception(s)
 ------ | ----------- | ---------------------
 `write($data)` | `static` | IOException
+`flush()` | `static` | IOException
+
+
 
 Examples:
 

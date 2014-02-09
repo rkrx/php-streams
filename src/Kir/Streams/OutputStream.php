@@ -10,4 +10,10 @@ interface OutputStream extends Stream {
 	 * @return $this
 	 */
 	public function write($data);
+
+	/**
+	 * @throws IOException
+	 * @return $this
+	 */
+	public function flush();
 }
