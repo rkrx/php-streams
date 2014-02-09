@@ -49,15 +49,6 @@ class NondestructiveReadWriteStream implements RandomAccessStream, TruncatableSt
 
 	/**
 	 * @throws IOException
-	 * @return $this
-	 */
-	public function flush() {
-		$this->stream->flush();
-		return $this;
-	}
-
-	/**
-	 * @throws IOException
 	 * @param int $pos
 	 * @return $this
 	 */

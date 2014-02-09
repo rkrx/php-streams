@@ -87,13 +87,6 @@ class ResourceStream implements RandomAccessStream, TruncatableStream {
 		$this->size = max(ftell($this->res), $this->size);
 		return $this;
 	}
-	/**
-	 * @throws IOException
-	 * @return $this
-	 */
-	public function flush() {
-		return $this;
-	}
 
 	/**
 	 * @return int
