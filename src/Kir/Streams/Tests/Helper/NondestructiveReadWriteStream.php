@@ -1,10 +1,11 @@
 <?php
-namespace Kir\Streams\Helper;
+namespace Kir\Streams\Tests\Helper;
 
 use Kir\Streams\Exceptions\IOException;
 use Kir\Streams\RandomAccessStream;
+use Kir\Streams\TruncatableStream;
 
-class NondestructiveReadWriteStream implements RandomAccessStream {
+class NondestructiveReadWriteStream implements RandomAccessStream, TruncatableStream {
 	/**
 	 * @var RandomAccessStream
 	 */
@@ -88,5 +89,13 @@ class NondestructiveReadWriteStream implements RandomAccessStream {
 	 */
 	public function getSize() {
 		return $this->stream->getSize();
+	}
+
+	/**
+	 * @throws IOException
+	 * @return $this
+	 */
+	public function truncate() {
+		$this->stream->truncate();
 	}
 }

@@ -1,5 +1,5 @@
 <?php
-namespace Kir\Streams\Helper;
+namespace Kir\Streams\Tests\Helper;
 
 use Kir\Streams\Stream;
 
@@ -7,5 +7,5 @@ interface StreamFactory {
 	/**
 	 * @return Stream
 	 */
-	public function getStream();
+	public function createStream();
 } 

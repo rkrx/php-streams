@@ -1,5 +1,5 @@
 <?php
-namespace Kir\Streams\Helper;
+namespace Kir\Streams\Tests\Helper;
 
 class MemoryStream extends ResourceStream {
 	/**

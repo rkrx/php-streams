@@ -1,56 +1,55 @@
 <?php
-namespace Kir\Streams;
+namespace Kir\Streams\Tests;
 
-class ResourceStreamTest {
+use Kir\Streams\Tests\Helper;
+use Kir\Streams\RandomAccessStream;
+use Kir\Streams\TruncatableStream;
+
+class ResourceStreamTest extends \PHPUnit_Framework_TestCase {
 	/**
 	 * @var Helper\StreamFactory
 	 */
-	private $factory = null;
-
-	/**
-	 * @var Helper\NondestructiveReadWriteStream
-	 */
-	private $referenceResource;
+	private $subjectFactory = null;
 
 	/**
 	 */
-	public function __construct(Helper\StreamFactory $factory) {
-		$this->factory = $factory;
-
-		$sourceStream = new Helper\ResourceStream(__DIR__.'/../../assets/test-data.txt', 'r');
-		$this->referenceResource = new Helper\NondestructiveReadWriteStream($sourceStream);
+	protected function setUp(Helper\StreamFactory $factory) {
+		parent::setUp();
+		$this->subjectFactory = $factory;
 	}
 
 	/**
 	 */
 	public function testRead() {
-		$stream = $this->createStream();
-		$data = $stream->read(7);
-		\PHPUnit_Framework_Assert::assertEquals('This is', $data);
+		$stream = $this->createSubject();
+		$data = $stream->read(26);
+		\PHPUnit_Framework_Assert::assertEquals('Lorem ipsum dolor sit amet', $data);
 	}
 
 	/**
 	 */
 	public function testReadAll() {
-		$stream = $this->createStream();
+		$stream = $this->createSubject();
 		$data = $stream->read();
-		\PHPUnit_Framework_Assert::assertEquals('This is a test', $data);
+		$hash = md5($data);
+		\PHPUnit_Framework_Assert::assertEquals('cbdd94ceda68ce93d86bc5c84c2537d6', $hash);
 	}
 
 	/**
 	 */
 	public function testWrite() {
-		$stream = $this->createStream();
+		$stream = $this->createSubject();
+		$stream->rewind();
 		$stream->write('ABCDEFG');
 		$stream->rewind();
-		$data = $stream->read();
+		$data = $stream->read(7);
 		\PHPUnit_Framework_Assert::assertEquals('ABCDEFG', $data);
 	}
 
 	/**
 	 */
 	public function testPositioning() {
-		$stream = $this->createStream();
+		$stream = $this->createSubject();
 		$stream->write('0987654321');
 		$stream->setPosition(0);
 		\PHPUnit_Framework_Assert::assertEquals(0, $stream->getPosition(), 'Set position to stream start');
@@ -62,7 +61,7 @@ class ResourceStreamTest {
 	/**
 	 */
 	public function testTruncate() {
-		$stream = $this->createStream();
+		$stream = $this->createSubject();
 
 		$this->truncateStream($stream);
 		$stream->write('This is a test');
@@ -70,6 +69,9 @@ class ResourceStreamTest {
 		\PHPUnit_Framework_Assert::assertEquals(0, $stream->getPosition());
 	}
 
+	/**
+	 * @param TruncatableStream $stream
+	 */
 	private function truncateStream(TruncatableStream $stream) {
 		$stream->truncate();
 	}
@@ -77,8 +79,8 @@ class ResourceStreamTest {
 	/**
 	 * @return RandomAccessStream
 	 */
-	private function createStream() {
-		return $this->factory->getStream();
+	private function createSubject() {
+		return $this->subjectFactory->createStream();
 	}
 }
  

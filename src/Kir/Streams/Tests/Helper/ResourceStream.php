@@ -1,11 +1,12 @@
 <?php
-namespace Kir\Streams\Helper;
+namespace Kir\Streams\Tests\Helper;
 
 use Kir\Streams\Exceptions\InvalidStreamOperationException;
 use Kir\Streams\Exceptions\IOException;
 use Kir\Streams\RandomAccessStream;
+use Kir\Streams\TruncatableStream;
 
-class ResourceStream implements RandomAccessStream {
+class ResourceStream implements RandomAccessStream, TruncatableStream {
 	/**
 	 * @var resource
 	 */
@@ -26,7 +27,8 @@ class ResourceStream implements RandomAccessStream {
 	 * @param string $mode
 	 */
 	public function __construct($filename, $mode) {
-		$this->res = fopen($filename, $mode);
+		$res = fopen($filename, $mode);
+		$this->setResource($res);
 	}
 
 	/**
@@ -149,11 +151,10 @@ class ResourceStream implements RandomAccessStream {
 	}
 
 	/**
-	 * @param int $size
 	 * @return $this
 	 */
-	public function truncate($size = 0) {
-		ftruncate($this->res, $size);
+	public function truncate() {
+		ftruncate($this->res, 0);
 		$this->rewind();
 		return $this;
 	}
@@ -162,7 +163,7 @@ class ResourceStream implements RandomAccessStream {
 	 * @return bool
 	 */
 	protected function isSeekable() {
-		return !!$this->getMetaValue('seekable');
+		return !!$this->getMetaValue('seekable', false);
 	}
 
 	/**
@@ -185,5 +186,17 @@ class ResourceStream implements RandomAccessStream {
 	 */
 	private function updateSize() {
 		$this->size = max(ftell($this->res), $this->size);
+	}
+
+	/**
+	 * @param string $string
+	 * @param mixed $default
+	 * @return mixed
+	 */
+	private function getMetaValue($string, $default) {
+		if(array_key_exists($string, $this->meta)) {
+			return $this->meta[$string];
+		}
+		return $default;
 	}
 }

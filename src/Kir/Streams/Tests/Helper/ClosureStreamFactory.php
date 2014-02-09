@@ -1,5 +1,5 @@
 <?php
-namespace Kir\Streams\Helper;
+namespace Kir\Streams\Tests\Helper;
 
 use Closure;
 use Kir\Streams\Stream;
@@ -19,7 +19,7 @@ class ClosureStreamFactory implements StreamFactory {
 	/**
 	 * @return Stream
 	 */
-	public function getStream() {
+	public function createStream() {
 		return call_user_func($this->callback);
 	}
 }
