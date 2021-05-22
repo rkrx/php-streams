@@ -1,15 +1,17 @@
 php-streams
 ===========
 
-<div style="background-color: red; color: white; font-weight: bold; padding: 10px; margin-top: 10px;">This library is work-in-progress.</div>
+<p style="background-color: red; color: white; font-weight: bold; padding: 10px; margin-top: 10px;">This library is work-in-progress.</p>
 
-This is a common and framework-agnostic set of stream-interfaces. The target is to supply an abstraction-layer for stream-providers as well as stream-consumers. There is documentation for the usage and the expected behaviour. Meaningful exceptions and compliance-tests are also included.
+As an alternative, have a look at this: https://github.com/fzaninotto/Streamer
+
+This is a generic and framework-agnostic approach to stream interfaces. The goal is to provide an abstraction layer for both stream providers and stream consumers. There is documentation for usage and expected behavior. Proper exceptions and compliance tests are also included.
 
 
 Streams
 -------
 
-Streams are useful to read and write string-based data from resources. Especially for PHP, streams have also the advantage that streams don't clone their data when passed as a function- or method-parameter which could lead to much less memory consumption based on the intense of large-string-usage. Resources can be everything that is able to emit or consume a stream of characters:
+Streams are useful for reading and writing from resources. By this I do not mean the stream approach that was introduced with Java8, for example.  Specifically for PHP, streams also have the advantage that streams do not clone their data when passed as function or method parameters, which can result in much lower memory consumption when large strings are used intensively. Resources can be anything capable of outputting or consuming a stream of byte-streams:
 
 * Devices
 * Files
@@ -23,31 +25,27 @@ Streams are useful to read and write string-based data from resources. Especiall
 
 Streams ...
 
-* are charset-agnostic
+* are and stay charset-agnostic
 * can be passed by reference, just like classes
 * can be (under certain circumstances) serialized and deserialized without consuming much memory.
 
-Thanks to abstraction, an application, service, or framework could rely an appropriate interface and is henceforth aware of byte-streams of any form.
+Because of abstraction and polymorphy, an application, service, or framework can fall back on a corresponding interface and is henceforth capable of dealing with byte streams of any form.
 
 The interfaces are built with the SOLID-principles in mind, especially the [interface-segregation-principle](http://en.wikipedia.org/wiki/Interface_segregation_principle).
 
-Every interface should only implement the absolute necessary methods required to target an (possible) existing type of stream.
+- Each interface should implement only the absolutely necessary methods that are required for a (possibly) existing stream type.
+- Any stream implementation should only be required to implement essential functionality.
+- Every IoC-aware component should only depend on interfaces, which provide the required functionality.
 
-Every stream implementation should only be forced to implement essential functionality.
+For example, a logger only needs to depend on one OutputStream. The logger does not need to know anything about the stream size or the current cursor position. A logger should have no knowledge of log file rotation or memory monitoring. This should be a matter for an external component. So the logger could write to any writable stream without having any idea what kind of stream it actually is.
 
-Every IoC-aware component should only depend on interfaces, which provide the required functionality.
-
-A logger for example only need to depend on a OutputStream. The logger do not need to know about the stream-size or the current cursor-position. A logger should not be aware of log-file-rotation or disk-space-monitoring. This should be a concern of an outer component. So the logger could write to any writable stream without having a clue, what kind of stream this actually is.
-
-Under certain circumstances, streams could be serializable. This is the case if a stream implements the `SerializableStream` interface. Internally normally only the state of the stream gets serialized. On deserialization, the state is restored and the stream tries to get to the last position in the stream. A serializable memory-stream needs to store the whole content somewhere on serialization.
+Under certain circumstances, streams can be serializable. This is the case when a stream implements the `SerializableStream` interface. Internally, normally only the state of the stream is serialized. On deserialization, the state is restored and the stream tries to get to the last position in the stream. A serializable memory stream must store the entire contents somewhere during serialization.
 
 
 Charsets and data-types
 -----------------------
 
-PHP has no support for byte-arrays like java. Every read- and write-operation is done using strings which are an array of (currently, as of PHP 5.x) 8-bit characters. Streams are principally charset agnostic. It's a concern of the respective implementation and its documentation how the incoming and outgoing data is treated. The (upcoming) standard-implementation of this library will provide plain 8-bit access to the supported resources.
-
-It is totally valid to build stream-implementations, that read data from other 8-bit-stream-implementations and convert them inplace. This applies to any form of direct conversion (charsets; en- or decoding; en- or decryption; security scanning; manipulation; etc).
+PHP does not have support for clearly identified byte arrays as Java does. Each read and write operation is done using strings, which are an array of (currently, as of PHP 5.x, 7.x and 8.x) 8-bit characters. In principle, a string is a byte array, but you shouldn't rely on it to remain so forever. Streams are generally character set agnostic. It is a matter of the particular implementation and its documentation how the incoming and outgoing data is handled. The (upcoming) standard implementation of this library will provide simple 8-bit access to the supported resources.
 
 
 Overview
@@ -58,7 +56,7 @@ Overview
 
 ### Stream
 
-`Stream` is the base-class for a number of other classes. Its main purpose is to provide functionality to connect or disconnect to a stream and give a base type for type-hinting:
+`Stream` is the base-class (marker-class) for a number of other classes. Its main purpose is to provide functionality to connect or disconnect to a stream and give a base type for type-hinting:
 
 ```PHP
 function handleStream(Stream $stream) {
@@ -72,33 +70,33 @@ function handleStream(Stream $stream) {
 }
 ```
 
-Method | Return-type | Possible exception(s)
------- | ----------- | ---------------------
-`connect()` | `static` | ResourceLockedException, IOException
-`disconnect()` | `static` | IOException
+Method         | Return-type | Possible exception(s)
+-------------- | ----------- | ---------------------
+`connect()`    | `static`    | ResourceLockedException, IOException
+`disconnect()` | `static`    | IOException
 
 
 ### InfiniteInputStream
 
-An `InfiniteInputStream` is a read-only stream that has no end. The `InputStream` is good for situations were it doesn't matter if a `Stream` has other abilities then reading data.
+An `InfiniteInputStream` is a read-only stream that has no end by definition.
 
 Examples:
 
 * Virtual resources
-  * [(linux) /dev/random](http://en.wikipedia.org/wiki//dev/random)
-  * [(linux) /dev/null](http://en.wikipedia.org/wiki//dev/null)
+  * [(*nix) /dev/random](http://en.wikipedia.org/wiki//dev/random)
+  * [(*nix) /dev/null](http://en.wikipedia.org/wiki//dev/null)
 
 
 ### InputStream
 
-An `InputStream` is a read-only stream that has an end. The `InputStream` is good for situations were it doesn't matter if a `Stream` has other abilities then reading data.
+An `InputStream` is a read-only stream that has an end.
 
 The `InputStream` publish these methods:
 
-Method | Return-type | Possible exception(s)
------- | ----------- | ---------------------
-`read($length = null)` | `string` | IOException
-`isAtEnd()` | `bool` | -
+Method                 | Return-type | Possible exception(s)
+---------------------- | ----------- | ---------------------
+`read($length = null)` | `string`    | IOException
+`isAtEnd()`            | `bool`      | -
 
 * `read`: Reads `$length` bytes from the current position. If the current position plus `$length` exceeds the end of stream, the actual content will contain only the remaining bytes till the end of the stream and the cursor gets placed there.
 * `isAtEnd`: If `true` the end of the stream was reached with either a read- or seek-operation. This method must not throw an exception.
